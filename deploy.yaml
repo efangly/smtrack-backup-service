@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backup
+  namespace: smtrack
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backup
+  template:
+    metadata:
+      labels:
+        app: backup
+    spec:
+      containers:
+      - name: backup
+        image: siamatic/smtrack-backup:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: 128Mi
+            cpu: 100m
+          limits:
+            memory: 128Mi
+            cpu: 100m
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: backup-config
+              key: DATABASE_URL
+        - name: LOG_URL
+          valueFrom:
+            configMapKeyRef:
+              name: backup-config
+              key: LOG_URL
+        - name: TEMPLOG_URL
+          valueFrom:
+            configMapKeyRef:
+              name: backup-config
+              key: TEMPLOG_URL
+        - name: RABBITMQ
+          valueFrom:
+            configMapKeyRef:
+              name: rabbitmq-config
+              key: RABBITMQ
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backup
+  namespace: smtrack
+spec:
+  selector:
+    app: backup
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+  type: ClusterIP

@@ -1,0 +1,64 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model LogDays {
+  id              String   @id @default(uuid())
+  serial          String
+  staticName      String
+  temp            Float    @default(0.00)
+  tempDisplay     Float    @default(0.00)
+  humidity        Float    @default(0.00)
+  humidityDisplay Float    @default(0.00)
+  sendTime        DateTime @default(now())
+  plug            Boolean  @default(false)
+  door1           Boolean  @default(false)
+  door2           Boolean  @default(false)
+  door3           Boolean  @default(false)
+  internet        Boolean  @default(false)
+  probe           String   @default("1")
+  battery         Int      @default(0)
+  tempInternal    Float?   @default(0.00)
+  extMemory       Boolean  @default(false)
+  createAt        DateTime @default(now())
+  updateAt        DateTime @default(now()) @updatedAt
+}
+
+model Notifications {
+  id         String   @id @default(uuid())
+  serial     String
+  staticName String
+  message    String
+  detail     String
+  status     Boolean  @default(false)
+  createAt   DateTime @default(now())
+  updateAt   DateTime @default(now()) @updatedAt
+}
+
+model TempLogs {
+  id        String   @id @default(uuid())
+  mcuId     String
+  internet  Boolean  @default(false)
+  door      Boolean  @default(false)
+  plugin    Boolean  @default(false)
+  tempValue Float    @default(0)
+  realValue Float    @default(0)
+  date      String?
+  time      String?
+  isAlert   Boolean  @default(false)
+  message   String?
+  probe     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
