@@ -15,19 +15,19 @@ import { ConsumerModule } from './consumer/consumer.module';
     CronModule,
     PrismaModule,
     ConsumerModule,
-    ClientsModule.register([
-      {
-        name: 'RABBITMQ_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: [process.env.RABBITMQ || 'amqp://admin:thanesmail1234@siamatic.co.th:5672'],
-          queue: 'send-backup',
-          queueOptions: { durable: true },
-          noAck: false,
-          prefetchCount: 1
-        }
-      },
-    ])
+    // ClientsModule.register([
+    //   {
+    //     name: 'RABBITMQ_SERVICE',
+    //     transport: Transport.RMQ,
+    //     options: {
+    //       urls: [process.env.RABBITMQ || 'amqp://admin:thanesmail1234@siamatic.co.th:5672'],
+    //       queue: 'send-backup',
+    //       queueOptions: { durable: true },
+    //       noAck: false,
+    //       prefetchCount: 1
+    //     }
+    //   },
+    // ])
   ],
   controllers: [],
   providers: [],
