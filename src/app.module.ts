@@ -6,6 +6,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConsumerModule } from './consumer/consumer.module';
+import { BackupModule } from './backup/backup.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConsumerModule } from './consumer/consumer.module';
     CronModule,
     PrismaModule,
     ConsumerModule,
+    BackupModule,
     // ClientsModule.register([
     //   {
     //     name: 'RABBITMQ_SERVICE',
