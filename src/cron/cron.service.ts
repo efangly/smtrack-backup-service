@@ -1,14 +1,22 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
-export class CronService {
+export class CronService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
   private readonly logger = new Logger(CronService.name);
 
+  async onModuleInit() {
+    await this.backupTempLog();
+  }
+
   @Cron('0 0 * * *')
+  async backup() {
+    await this.backupTempLog();
+  }
+
   async backupTempLog() {
     try {
       const templog = await axios.get(`${String(process.env.TEMPLOG_URL)}/backup`);
