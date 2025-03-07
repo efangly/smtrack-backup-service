@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import axios from 'axios';
 import { PrismaService } from '../prisma/prisma.service';
+import { format } from 'date-fns';
 
 @Injectable()
 export class CronService implements OnModuleInit {
@@ -15,6 +16,7 @@ export class CronService implements OnModuleInit {
   @Cron('0 0 * * *')
   async backup() {
     await this.backupTempLog();
+    this.logger.log(`delete log success at ${format(new Date(), "yyyy-MM-dd'T'HH:mm:ss'Z'")}`);
   }
 
   async backupTempLog() {
