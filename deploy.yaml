@@ -4,7 +4,7 @@ metadata:
   name: backup
   namespace: smtrack
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
       app: backup
@@ -49,16 +49,6 @@ spec:
             configMapKeyRef:
               name: backup-config
               key: DATABASE_URL
-        - name: LOG_URL
-          valueFrom:
-            configMapKeyRef:
-              name: backup-config
-              key: LOG_URL
-        - name: TEMPLOG_URL
-          valueFrom:
-            configMapKeyRef:
-              name: backup-config
-              key: TEMPLOG_URL
         - name: RABBITMQ
           valueFrom:
             configMapKeyRef:
