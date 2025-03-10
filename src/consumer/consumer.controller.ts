@@ -1,7 +1,7 @@
 import { Controller, Logger } from '@nestjs/common';
 import { EventPattern, Ctx, Payload, RmqContext } from '@nestjs/microservices';
 import { ConsumerService } from './consumer.service';
-import { LogDays, Notifications, } from '@prisma/client';;
+import { LogDays, Notifications, TempLogs, } from '@prisma/client';;
 
 @Controller()
 export class ConsumerController {
@@ -27,6 +27,19 @@ export class ConsumerController {
     const message = context.getMessage();
     try {
       await this.consumerService.notificationBackup(data);
+      channel.ack(message);
+    } catch (error) {
+      this.logger.error(error);
+      // channel.nack(message, false, false);
+    }
+  }
+
+  @EventPattern('templog-backup')
+  async backupTemplog(@Payload() data: TempLogs, @Ctx() context: RmqContext) {
+    const channel = context.getChannelRef();
+    const message = context.getMessage();
+    try {
+      await this.consumerService.templogBackup(data);
       channel.ack(message);
     } catch (error) {
       this.logger.error(error);

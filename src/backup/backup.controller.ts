@@ -7,6 +7,7 @@ export class BackupController {
 
   @Get()
   async backupLog() {
-    return this.backup.backupTempLog();
+    await this.backup.backupTempLog();
+    return "OK";
   }
 }

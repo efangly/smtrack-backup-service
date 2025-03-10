@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { LogDays, Notifications } from '@prisma/client';
+import { LogDays, Notifications, TempLogs } from '@prisma/client';
 
 @Injectable()
 export class ConsumerService {
@@ -12,5 +12,9 @@ export class ConsumerService {
 
   async notificationBackup(data: Notifications) {
     await this.prisma.notifications.create({ data });
+  }
+
+  async templogBackup(data: TempLogs) {
+    await this.prisma.tempLogs.create({ data });
   }
 }
